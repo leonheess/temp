@@ -1,13 +1,22 @@
-import { it, expect } from 'vitest';
+import { it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
+import { createTestingPinia } from '@pinia/testing';
 import Component from '../Component.vue';
-import { i18nMock, piniaMock } from './mockPlugins';
 
-it('does work', () => {
-  const wrapper = mount(Component, {
-    global: {
-      plugins: [i18nMock, piniaMock],
-    },
-  });
+const options = {
+  global: {
+    plugins: [
+      createTestingPinia({
+        createSpy: vi.fn,
+        initialState: {
+          items: [],
+        },
+      }),
+    ],
+  },
+};
+
+it('works', () => {
+  const wrapper = mount(Component, options);
   expect(wrapper.findComponent(Component)).toBeTruthy();
 });
